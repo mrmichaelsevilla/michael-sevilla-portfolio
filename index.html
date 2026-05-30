@@ -1,297 +1,338 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Michael Sevilla · Data Automation & IT</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --navy: #0d1f3c;
-    --gold: #c9a227;
-    --gold-light: #f0d070;
-    --cream: #f7f6f2;
-    --white: #ffffff;
-    --gray-100: #f0ede6;
-    --gray-300: #d5d0c5;
-    --gray-500: #8a8680;
-    --gray-700: #4a4744;
-    --text: #1a1916;
-  }
+:root{
+  --bg:#060e1c;
+  --gold:#c9a227;
+  --gold2:#f0d070;
+  --white:#f0ece0;
+  --dim:#8a8070;
+  --card:rgba(255,255,255,0.03);
+  --border:rgba(201,162,39,0.15);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--white);
+  overflow-x:hidden;
+  cursor:none;
+}
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ── Custom cursor ── */
+#cursor{
+  width:10px;height:10px;
+  background:var(--gold);
+  border-radius:50%;
+  position:fixed;top:0;left:0;
+  pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:transform 0.08s ease;
+  mix-blend-mode:screen;
+}
+#cursor-ring{
+  width:36px;height:36px;
+  border:1px solid rgba(201,162,39,0.5);
+  border-radius:50%;
+  position:fixed;top:0;left:0;
+  pointer-events:none;z-index:9998;
+  transform:translate(-50%,-50%);
+  transition:left 0.12s ease,top 0.12s ease;
+}
 
-  html { scroll-behavior: smooth; }
+/* ── Canvas background ── */
+#bg-canvas{
+  position:fixed;inset:0;
+  z-index:0;pointer-events:none;
+}
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--cream);
-    color: var(--text);
-    font-size: 15px;
-    line-height: 1.6;
-    overflow-x: hidden;
-  }
+/* ── Noise overlay ── */
+body::after{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity:0.4;pointer-events:none;z-index:1;
+}
 
-  /* ── Nav ── */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    background: rgba(247,246,242,0.92);
-    backdrop-filter: blur(12px);
-    border-bottom: 0.5px solid var(--gray-300);
-    padding: 0 48px;
-    height: 56px;
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .nav-logo {
-    font-family: 'DM Serif Display', serif;
-    font-size: 17px; color: var(--navy); text-decoration: none;
-    letter-spacing: -0.01em;
-  }
-  .nav-logo span { color: var(--gold); }
-  .nav-links { display: flex; gap: 32px; }
-  .nav-links a {
-    font-size: 13px; font-weight: 400; color: var(--gray-700);
-    text-decoration: none; letter-spacing: 0.02em;
-    transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--navy); }
+/* ── Nav ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:0 52px;height:58px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(6,14,28,0.85);
+  backdrop-filter:blur(16px);
+  border-bottom:0.5px solid var(--border);
+}
+.nav-logo{
+  font-family:'Playfair Display',serif;
+  font-size:18px;color:var(--white);text-decoration:none;
+  letter-spacing:-0.01em;
+}
+.nav-logo span{color:var(--gold);font-style:italic;}
+.nav-links{display:flex;gap:36px;}
+.nav-links a{
+  font-size:12px;font-weight:400;color:var(--dim);
+  text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;
+  transition:color 0.2s;
+}
+.nav-links a:hover{color:var(--gold);}
 
-  /* ── Hero ── */
-  .hero {
-    min-height: 100vh;
-    display: flex; align-items: center;
-    padding: 100px 48px 80px;
-    max-width: 1100px; margin: 0 auto;
-    position: relative;
-  }
-  .hero-content { max-width: 620px; }
-  .hero-tag {
-    display: inline-flex; align-items: center; gap: 8px;
-    font-size: 11px; font-weight: 500; letter-spacing: 0.12em;
-    text-transform: uppercase; color: var(--gold);
-    margin-bottom: 28px;
-  }
-  .hero-tag::before {
-    content: ''; width: 24px; height: 1px; background: var(--gold);
-  }
-  .hero-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: clamp(42px, 6vw, 68px);
-    line-height: 1.05;
-    color: var(--navy);
-    letter-spacing: -0.02em;
-    margin-bottom: 24px;
-  }
-  .hero-title em {
-    font-style: italic; color: var(--gold);
-  }
-  .hero-desc {
-    font-size: 16px; color: var(--gray-700);
-    line-height: 1.75; margin-bottom: 40px;
-    font-weight: 300; max-width: 480px;
-  }
-  .hero-cta {
-    display: inline-flex; align-items: center; gap: 10px;
-    background: var(--navy); color: var(--white);
-    padding: 13px 28px; border-radius: 4px;
-    font-size: 13px; font-weight: 500; text-decoration: none;
-    letter-spacing: 0.04em; transition: background 0.2s;
-  }
-  .hero-cta:hover { background: #162e54; }
-  .hero-cta-arrow { font-size: 16px; transition: transform 0.2s; }
-  .hero-cta:hover .hero-cta-arrow { transform: translateX(4px); }
+/* ── Sections wrapper ── */
+.page{position:relative;z-index:2;}
 
-  .hero-stats {
-    position: absolute; right: 48px; bottom: 80px;
-    display: flex; flex-direction: column; gap: 28px;
-    opacity: 0.85;
-  }
-  .stat { text-align: right; }
-  .stat-num {
-    font-family: 'DM Serif Display', serif;
-    font-size: 36px; color: var(--navy); line-height: 1;
-    letter-spacing: -0.02em;
-  }
-  .stat-label { font-size: 11px; color: var(--gray-500); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 2px; }
+/* ── Hero ── */
+.hero{
+  min-height:100vh;
+  display:flex;align-items:center;
+  padding:120px 52px 80px;
+  max-width:1200px;margin:0 auto;
+  position:relative;
+}
+.hero-content{max-width:660px;}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;color:var(--gold);
+  letter-spacing:0.1em;margin-bottom:28px;
+}
+.hero-tag::before{content:'';width:28px;height:1px;background:var(--gold);}
+.hero-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(44px,6.5vw,76px);
+  line-height:1.05;
+  color:var(--white);
+  letter-spacing:-0.02em;
+  margin-bottom:24px;
+}
+.hero-title em{color:var(--gold);font-style:italic;}
+.hero-desc{
+  font-size:16px;color:var(--dim);
+  line-height:1.8;margin-bottom:44px;
+  font-weight:300;max-width:500px;
+}
+.hero-cta{
+  display:inline-flex;align-items:center;gap:12px;
+  border:1px solid var(--gold);
+  color:var(--gold);padding:13px 30px;border-radius:3px;
+  font-size:12px;font-weight:500;text-decoration:none;
+  letter-spacing:0.1em;text-transform:uppercase;
+  transition:background 0.2s,color 0.2s;
+}
+.hero-cta:hover{background:var(--gold);color:var(--bg);}
 
-  .hero-line {
-    position: absolute; right: 180px; top: 120px; bottom: 100px;
-    width: 0.5px; background: var(--gray-300);
-  }
+.hero-stats{
+  position:absolute;right:52px;top:50%;
+  transform:translateY(-50%);
+  display:flex;flex-direction:column;gap:36px;
+}
+.stat-num{
+  font-family:'Playfair Display',serif;
+  font-size:44px;color:var(--gold);
+  line-height:1;letter-spacing:-0.02em;
+}
+.stat-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;color:var(--dim);
+  letter-spacing:0.1em;text-transform:uppercase;margin-top:4px;
+}
+.hero-vline{
+  position:absolute;right:230px;top:120px;bottom:80px;
+  width:0.5px;background:var(--border);
+}
 
-  /* ── Section shared ── */
-  section { padding: 96px 48px; max-width: 1100px; margin: 0 auto; }
-  .section-eyebrow {
-    font-size: 10.5px; font-weight: 500; letter-spacing: 0.14em;
-    text-transform: uppercase; color: var(--gold);
-    margin-bottom: 14px; display: flex; align-items: center; gap: 10px;
-  }
-  .section-eyebrow::after { content: ''; flex: 1; max-width: 40px; height: 0.5px; background: var(--gold); }
-  .section-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: clamp(28px, 4vw, 40px);
-    color: var(--navy); letter-spacing: -0.02em;
-    margin-bottom: 48px; line-height: 1.15;
-  }
+/* ── Shared section ── */
+.section{
+  padding:100px 52px;
+  max-width:1200px;margin:0 auto;
+}
+.section-eyebrow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;color:var(--gold);
+  letter-spacing:0.14em;text-transform:uppercase;
+  margin-bottom:12px;display:flex;align-items:center;gap:10px;
+}
+.section-eyebrow::after{content:'';width:36px;height:0.5px;background:var(--gold);}
+.section-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(30px,4vw,46px);
+  color:var(--white);letter-spacing:-0.02em;
+  margin-bottom:52px;line-height:1.12;
+}
 
-  /* ── About ── */
-  .about-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 64px;
-    align-items: start;
-  }
-  .about-text { font-size: 15px; color: var(--gray-700); line-height: 1.8; font-weight: 300; }
-  .about-text p + p { margin-top: 16px; }
-  .about-text strong { color: var(--navy); font-weight: 500; }
+/* ── About ── */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start;}
+.about-text{font-size:15px;color:var(--dim);line-height:1.85;font-weight:300;}
+.about-text p+p{margin-top:16px;}
+.about-text strong{color:var(--white);font-weight:500;}
+.detail-row{
+  display:flex;justify-content:space-between;align-items:baseline;
+  padding:14px 0;border-bottom:0.5px solid rgba(255,255,255,0.06);
+}
+.detail-row:first-child{border-top:0.5px solid rgba(255,255,255,0.06);}
+.detail-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;color:var(--dim);letter-spacing:0.08em;text-transform:uppercase;
+}
+.detail-value{font-size:13px;color:var(--white);font-weight:500;text-align:right;}
 
-  .about-details { display: flex; flex-direction: column; gap: 0; }
-  .detail-row {
-    display: flex; justify-content: space-between; align-items: baseline;
-    padding: 14px 0;
-    border-bottom: 0.5px solid var(--gray-300);
-    font-size: 13.5px;
-  }
-  .detail-row:first-child { border-top: 0.5px solid var(--gray-300); }
-  .detail-label { color: var(--gray-500); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
-  .detail-value { color: var(--navy); font-weight: 500; text-align: right; }
+/* ── Skills dark section ── */
+.skills-wrap{
+  background:rgba(0,0,0,0.3);
+  border-top:0.5px solid var(--border);
+  border-bottom:0.5px solid var(--border);
+}
+.skills-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1px;background:rgba(255,255,255,0.04);
+  border-radius:8px;overflow:hidden;
+}
+.skill-card{
+  background:rgba(6,14,28,0.9);
+  padding:32px 28px;transition:background 0.2s;
+}
+.skill-card:hover{background:rgba(201,162,39,0.06);}
+.skill-num{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;color:rgba(201,162,39,0.4);
+  margin-bottom:16px;
+}
+.skill-name{font-size:15px;font-weight:500;color:var(--white);margin-bottom:8px;}
+.skill-desc{font-size:12.5px;color:var(--dim);line-height:1.65;font-weight:300;}
+.skill-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;}
+.skill-tag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9.5px;letter-spacing:0.04em;
+  background:rgba(201,162,39,0.08);color:var(--gold);
+  padding:3px 8px;border-radius:2px;border:0.5px solid rgba(201,162,39,0.2);
+}
 
-  /* ── Skills ── */
-  #skills { background: var(--navy); max-width: 100%; padding: 96px 0; }
-  .skills-inner { max-width: 1100px; margin: 0 auto; padding: 0 48px; }
-  .skills-inner .section-eyebrow { color: var(--gold); }
-  .skills-inner .section-eyebrow::after { background: var(--gold); }
-  .skills-inner .section-title { color: var(--white); }
+/* ── Projects ── */
+.projects-list{display:flex;flex-direction:column;gap:1px;background:rgba(255,255,255,0.05);border-radius:8px;overflow:hidden;}
+.project-row{
+  background:rgba(6,14,28,0.95);
+  padding:30px 36px;
+  display:grid;grid-template-columns:1fr auto;
+  align-items:center;gap:24px;
+  transition:background 0.15s;
+}
+.project-row:hover{background:rgba(201,162,39,0.04);}
+.project-num{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;color:rgba(201,162,39,0.5);margin-bottom:8px;
+}
+.project-name{font-size:17px;font-weight:500;color:var(--white);margin-bottom:6px;}
+.project-desc{font-size:13px;color:var(--dim);line-height:1.65;max-width:560px;font-weight:300;}
+.project-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+.project-tag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9.5px;color:var(--dim);
+  background:rgba(255,255,255,0.04);
+  padding:3px 8px;border-radius:2px;
+  border:0.5px solid rgba(255,255,255,0.08);
+}
+.badge{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;font-weight:500;letter-spacing:0.1em;
+  text-transform:uppercase;padding:5px 12px;border-radius:2px;
+  white-space:nowrap;flex-shrink:0;
+}
+.badge-live{background:rgba(34,197,94,0.08);color:#4ade80;border:0.5px solid rgba(34,197,94,0.25);}
+.badge-active{background:rgba(201,162,39,0.08);color:var(--gold);border:0.5px solid var(--border);}
+.badge-build{background:rgba(255,255,255,0.04);color:var(--dim);border:0.5px solid rgba(255,255,255,0.08);}
 
-  .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,255,255,0.08); border: 0.5px solid rgba(255,255,255,0.08); border-radius: 8px; overflow: hidden; }
-  .skill-card {
-    background: rgba(255,255,255,0.03);
-    padding: 32px 28px;
-    transition: background 0.2s;
-  }
-  .skill-card:hover { background: rgba(201,162,39,0.08); }
-  .skill-icon { font-size: 22px; margin-bottom: 14px; }
-  .skill-name { font-size: 14px; font-weight: 500; color: var(--white); margin-bottom: 8px; }
-  .skill-desc { font-size: 12.5px; color: rgba(255,255,255,0.45); line-height: 1.6; font-weight: 300; }
-  .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
-  .skill-tag {
-    font-size: 10px; font-weight: 500; letter-spacing: 0.06em;
-    background: rgba(201,162,39,0.12); color: var(--gold);
-    padding: 3px 8px; border-radius: 3px;
-  }
+/* ── Experience ── */
+.exp-item{
+  display:grid;grid-template-columns:180px 1fr;
+  gap:48px;padding:40px 0;
+  border-bottom:0.5px solid rgba(255,255,255,0.06);
+}
+.exp-item:first-child{border-top:0.5px solid rgba(255,255,255,0.06);}
+.exp-period{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;color:var(--dim);padding-top:4px;letter-spacing:0.04em;
+}
+.exp-role{font-size:17px;font-weight:500;color:var(--white);margin-bottom:4px;}
+.exp-company{font-size:13px;color:var(--gold);font-weight:500;margin-bottom:12px;}
+.exp-desc{font-size:13.5px;color:var(--dim);line-height:1.8;font-weight:300;}
+.exp-bullets{list-style:none;margin-top:14px;display:flex;flex-direction:column;gap:7px;}
+.exp-bullets li{font-size:13px;color:rgba(138,128,112,0.8);padding-left:18px;position:relative;line-height:1.6;}
+.exp-bullets li::before{content:'—';position:absolute;left:0;color:var(--gold);}
 
-  /* ── Projects ── */
-  .projects-grid { display: flex; flex-direction: column; gap: 1px; background: var(--gray-300); border-radius: 8px; overflow: hidden; }
-  .project-row {
-    background: var(--white);
-    padding: 32px 36px;
-    display: grid; grid-template-columns: 1fr auto;
-    align-items: center; gap: 24px;
-    transition: background 0.15s;
-    cursor: default;
-  }
-  .project-row:hover { background: var(--gray-100); }
-  .project-num { font-family: 'DM Serif Display', serif; font-size: 13px; color: var(--gold); margin-bottom: 8px; }
-  .project-name { font-size: 17px; font-weight: 500; color: var(--navy); margin-bottom: 6px; }
-  .project-desc { font-size: 13px; color: var(--gray-500); line-height: 1.6; max-width: 560px; font-weight: 300; }
-  .project-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
-  .project-tag {
-    font-size: 10px; font-weight: 500; letter-spacing: 0.06em;
-    background: var(--gray-100); color: var(--gray-700);
-    padding: 3px 10px; border-radius: 3px; border: 0.5px solid var(--gray-300);
-  }
-  .project-badge {
-    font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
-    text-transform: uppercase; padding: 5px 12px; border-radius: 20px;
-    white-space: nowrap; flex-shrink: 0;
-  }
-  .badge-live { background: #ecfdf5; color: #065f46; border: 0.5px solid #a7f3d0; }
-  .badge-active { background: #eff6ff; color: #1e40af; border: 0.5px solid #bfdbfe; }
-  .badge-build { background: #fefce8; color: #854d0e; border: 0.5px solid #fde68a; }
+/* ── Contact ── */
+.contact-wrap{
+  border:0.5px solid var(--border);border-radius:10px;
+  padding:72px 64px;
+  display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;
+  background:rgba(201,162,39,0.02);
+}
+.contact-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(28px,3.5vw,42px);
+  color:var(--white);line-height:1.15;
+  letter-spacing:-0.02em;margin-bottom:16px;
+}
+.contact-desc{font-size:14px;color:var(--dim);line-height:1.8;font-weight:300;}
+.contact-links{display:flex;flex-direction:column;gap:12px;}
+.contact-link{
+  display:flex;align-items:center;gap:14px;
+  padding:16px 20px;
+  background:rgba(255,255,255,0.02);
+  border:0.5px solid rgba(255,255,255,0.07);
+  border-radius:4px;text-decoration:none;
+  transition:background 0.2s,border-color 0.2s;
+}
+.contact-link:hover{background:rgba(201,162,39,0.07);border-color:var(--border);}
+.contact-link-icon{font-size:16px;width:20px;text-align:center;flex-shrink:0;}
+.contact-link-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9.5px;color:var(--dim);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:2px;
+}
+.contact-link-value{font-size:13px;color:var(--white);font-weight:500;}
 
-  /* ── Experience ── */
-  .exp-list { display: flex; flex-direction: column; }
-  .exp-item {
-    display: grid; grid-template-columns: 160px 1fr;
-    gap: 40px; padding: 36px 0;
-    border-bottom: 0.5px solid var(--gray-300);
-  }
-  .exp-item:first-child { border-top: 0.5px solid var(--gray-300); }
-  .exp-period { font-size: 12px; color: var(--gray-500); letter-spacing: 0.04em; padding-top: 3px; }
-  .exp-role { font-size: 16px; font-weight: 500; color: var(--navy); margin-bottom: 4px; }
-  .exp-company { font-size: 13px; color: var(--gold); font-weight: 500; margin-bottom: 12px; }
-  .exp-desc { font-size: 13.5px; color: var(--gray-700); line-height: 1.75; font-weight: 300; }
-  .exp-bullets { list-style: none; margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
-  .exp-bullets li { font-size: 13px; color: var(--gray-500); padding-left: 14px; position: relative; }
-  .exp-bullets li::before { content: '—'; position: absolute; left: 0; color: var(--gold); }
+/* ── Footer ── */
+footer{
+  text-align:center;padding:32px 52px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;color:var(--dim);
+  border-top:0.5px solid rgba(255,255,255,0.05);
+  position:relative;z-index:2;
+}
+footer span{color:var(--gold);}
 
-  /* ── Contact ── */
-  .contact-wrap {
-    background: var(--navy); border-radius: 12px;
-    padding: 72px 64px;
-    display: grid; grid-template-columns: 1fr 1fr; gap: 64px;
-    align-items: center;
-  }
-  .contact-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: clamp(28px, 3.5vw, 40px);
-    color: var(--white); line-height: 1.15;
-    letter-spacing: -0.02em; margin-bottom: 16px;
-  }
-  .contact-desc { font-size: 14px; color: rgba(255,255,255,0.45); line-height: 1.75; font-weight: 300; }
-  .contact-links { display: flex; flex-direction: column; gap: 14px; }
-  .contact-link {
-    display: flex; align-items: center; gap: 14px;
-    padding: 16px 20px;
-    background: rgba(255,255,255,0.05);
-    border: 0.5px solid rgba(255,255,255,0.08);
-    border-radius: 6px; text-decoration: none;
-    transition: background 0.2s, border-color 0.2s;
-  }
-  .contact-link:hover { background: rgba(201,162,39,0.1); border-color: rgba(201,162,39,0.3); }
-  .contact-link-icon { font-size: 18px; width: 20px; text-align: center; flex-shrink: 0; }
-  .contact-link-label { font-size: 11px; color: rgba(255,255,255,0.4); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1px; }
-  .contact-link-value { font-size: 13.5px; color: var(--white); font-weight: 500; }
+/* ── Reveal animations ── */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity 0.7s ease,transform 0.7s ease;}
+.reveal.on{opacity:1;transform:translateY(0);}
+.reveal.delay-1{transition-delay:0.1s;}
+.reveal.delay-2{transition-delay:0.2s;}
+.reveal.delay-3{transition-delay:0.3s;}
 
-  /* ── Footer ── */
-  footer {
-    text-align: center; padding: 32px 48px;
-    font-size: 12px; color: var(--gray-500);
-    border-top: 0.5px solid var(--gray-300);
-  }
-  footer span { color: var(--gold); }
-
-  /* ── Animations ── */
-  .fade-up {
-    opacity: 0; transform: translateY(24px);
-    animation: fadeUp 0.6s ease forwards;
-  }
-  @keyframes fadeUp {
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .delay-1 { animation-delay: 0.1s; }
-  .delay-2 { animation-delay: 0.2s; }
-  .delay-3 { animation-delay: 0.3s; }
-  .delay-4 { animation-delay: 0.4s; }
-
-  /* ── Responsive ── */
-  @media (max-width: 768px) {
-    nav { padding: 0 20px; }
-    .nav-links { gap: 16px; }
-    .hero { padding: 100px 20px 80px; }
-    .hero-stats { display: none; }
-    .hero-line { display: none; }
-    section { padding: 64px 20px; }
-    .about-grid { grid-template-columns: 1fr; gap: 40px; }
-    .skills-inner { padding: 0 20px; }
-    .skills-grid { grid-template-columns: 1fr; }
-    .exp-item { grid-template-columns: 1fr; gap: 8px; }
-    .contact-wrap { grid-template-columns: 1fr; padding: 40px 28px; gap: 36px; }
-  }
+@media(max-width:768px){
+  nav{padding:0 20px;}
+  .nav-links{gap:16px;}
+  .hero{padding:100px 20px 60px;}
+  .hero-stats,.hero-vline{display:none;}
+  .section{padding:64px 20px;}
+  .about-grid,.exp-item,.contact-wrap{grid-template-columns:1fr;gap:32px;}
+  .skills-grid{grid-template-columns:1fr;}
+  .contact-wrap{padding:36px 24px;}
+}
 </style>
 </head>
 <body>
 
-<!-- ── Nav ── -->
+<canvas id="bg-canvas"></canvas>
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<div class="page">
+
+<!-- Nav -->
 <nav>
   <a href="#" class="nav-logo">Michael <span>Sevilla</span></a>
   <div class="nav-links">
@@ -303,25 +344,19 @@
   </div>
 </nav>
 
-<!-- ── Hero ── -->
-<div style="max-width:1100px; margin:0 auto; position:relative;">
+<!-- Hero -->
+<div style="max-width:1200px;margin:0 auto;position:relative;">
   <div class="hero">
     <div class="hero-content">
-      <div class="hero-tag fade-up">Data Automation & IT Specialist</div>
-      <h1 class="hero-title fade-up delay-1">
+      <div class="hero-tag">Data Automation & IT Specialist</div>
+      <h1 class="hero-title">
         Building systems<br>that <em>actually work.</em>
       </h1>
-      <p class="hero-desc fade-up delay-2">
-        Google Workspace Super Admin and automation engineer with deep experience in 245D disability services operations, security compliance, and enterprise IT infrastructure.
-      </p>
-      <a href="#projects" class="hero-cta fade-up delay-3">
-        View my work <span class="hero-cta-arrow">→</span>
-      </a>
+      <p class="hero-desc">Google Workspace Super Admin and automation engineer with deep experience in 245D disability services operations, security compliance, and enterprise IT infrastructure.</p>
+      <a href="#projects" class="hero-cta">View my work →</a>
     </div>
-
-    <div class="hero-line"></div>
-
-    <div class="hero-stats fade-up delay-4">
+    <div class="hero-vline"></div>
+    <div class="hero-stats">
       <div class="stat">
         <div class="stat-num">180+</div>
         <div class="stat-label">Staff accounts managed</div>
@@ -338,231 +373,146 @@
   </div>
 </div>
 
-<!-- ── About ── -->
-<section id="about">
-  <div class="section-eyebrow">About</div>
-  <h2 class="section-title">Data-driven. Security-focused.<br>Operationally precise.</h2>
-  <div class="about-grid">
+<!-- About -->
+<div class="section" id="about">
+  <div class="section-eyebrow reveal">About</div>
+  <h2 class="section-title reveal delay-1">Data-driven. Security-focused.<br>Operationally precise.</h2>
+  <div class="about-grid reveal delay-2">
     <div class="about-text">
-      <p>I'm a <strong>Data Automation & Audit Specialist</strong> working remotely from the Philippines for BrightPath LLC, a Minnesota-based 245D disability services provider. I serve as Google Workspace Super Admin, overseeing IT security, compliance, and operational automation for an organization of 180+ staff.</p>
+      <p>I'm a <strong>Data Automation & Audit Specialist</strong> working remotely from the Philippines for BrightPath LLC, a Minnesota-based 245D disability services provider. I serve as Google Workspace Super Admin, overseeing IT security, compliance, and operational automation for 180+ staff.</p>
       <p>My work sits at the intersection of <strong>IT security</strong>, <strong>data automation</strong>, and <strong>process optimization</strong> — building systems that reduce manual work, enforce compliance, and give leadership real-time visibility into operations.</p>
-      <p>I hold an <strong>S360 Pathfinder designation</strong> through Summit 360 Solutions, an external IT partner, and collaborate closely with executive leadership on strategic technology decisions.</p>
+      <p>I hold an <strong>S360 Pathfinder designation</strong> through Summit 360 Solutions and collaborate closely with executive leadership on strategic technology decisions.</p>
     </div>
-    <div class="about-details">
-      <div class="detail-row">
-        <span class="detail-label">Role</span>
-        <span class="detail-value">Data Automation & Audit Specialist</span>
-      </div>
-      <div class="detail-row">
-        <span class="detail-label">Organization</span>
-        <span class="detail-value">BrightPath LLC</span>
-      </div>
-      <div class="detail-row">
-        <span class="detail-label">Location</span>
-        <span class="detail-value">Philippines (Remote)</span>
-      </div>
-      <div class="detail-row">
-        <span class="detail-label">Designation</span>
-        <span class="detail-value">S360 Pathfinder · Summit 360</span>
-      </div>
-      <div class="detail-row">
-        <span class="detail-label">Compliance</span>
-        <span class="detail-value">HIPAA · 245D · GWS Security</span>
-      </div>
-      <div class="detail-row">
-        <span class="detail-label">Admin Access</span>
-        <span class="detail-value">Google Workspace Super Admin</span>
-      </div>
+    <div>
+      <div class="detail-row"><span class="detail-label">Role</span><span class="detail-value">Data Automation & Audit Specialist</span></div>
+      <div class="detail-row"><span class="detail-label">Organization</span><span class="detail-value">BrightPath LLC</span></div>
+      <div class="detail-row"><span class="detail-label">Location</span><span class="detail-value">Philippines (Remote)</span></div>
+      <div class="detail-row"><span class="detail-label">Designation</span><span class="detail-value">S360 Pathfinder · Summit 360</span></div>
+      <div class="detail-row"><span class="detail-label">Compliance</span><span class="detail-value">HIPAA · 245D · GWS Security</span></div>
+      <div class="detail-row"><span class="detail-label">Admin</span><span class="detail-value">Google Workspace Super Admin</span></div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- ── Skills ── -->
-<div id="skills">
-  <div class="skills-inner">
-    <div class="section-eyebrow">Skills</div>
-    <h2 class="section-title">Technical expertise<br>across the stack.</h2>
-    <div class="skills-grid">
+<!-- Skills -->
+<div class="skills-wrap">
+  <div class="section" id="skills">
+    <div class="section-eyebrow reveal">Skills</div>
+    <h2 class="section-title reveal delay-1">Technical expertise<br>across the stack.</h2>
+    <div class="skills-grid reveal delay-2">
       <div class="skill-card">
-        <div class="skill-icon">⚙️</div>
+        <div class="skill-num">01</div>
         <div class="skill-name">Automation & Scripting</div>
-        <div class="skill-desc">Building end-to-end automations that eliminate manual workflows and reduce error across HR, IT, and compliance processes.</div>
-        <div class="skill-tags">
-          <span class="skill-tag">Google Apps Script</span>
-          <span class="skill-tag">JavaScript</span>
-          <span class="skill-tag">n8n</span>
-          <span class="skill-tag">Make</span>
-        </div>
+        <div class="skill-desc">End-to-end automations that eliminate manual workflows across HR, IT, and compliance processes.</div>
+        <div class="skill-tags"><span class="skill-tag">Google Apps Script</span><span class="skill-tag">JavaScript</span><span class="skill-tag">n8n</span><span class="skill-tag">Make</span></div>
       </div>
       <div class="skill-card">
-        <div class="skill-icon">🔐</div>
+        <div class="skill-num">02</div>
         <div class="skill-name">IT Security & Compliance</div>
-        <div class="skill-desc">Designing and enforcing security frameworks aligned to HIPAA and 245D requirements, including 2FA rollout, access controls, and audit trails.</div>
-        <div class="skill-tags">
-          <span class="skill-tag">HIPAA</span>
-          <span class="skill-tag">2FA Enforcement</span>
-          <span class="skill-tag">NIST CSF</span>
-          <span class="skill-tag">Alert Center</span>
-        </div>
+        <div class="skill-desc">Security frameworks aligned to HIPAA and 245D, including 2FA rollout, access controls, and audit trails.</div>
+        <div class="skill-tags"><span class="skill-tag">HIPAA</span><span class="skill-tag">2FA</span><span class="skill-tag">NIST CSF</span><span class="skill-tag">Alert Center</span></div>
       </div>
       <div class="skill-card">
-        <div class="skill-icon">☁️</div>
+        <div class="skill-num">03</div>
         <div class="skill-name">Google Workspace Admin</div>
-        <div class="skill-desc">Super Admin managing 180+ accounts, OU structures, shared drives, group policies, device management, and security configurations.</div>
-        <div class="skill-tags">
-          <span class="skill-tag">GWS Super Admin</span>
-          <span class="skill-tag">Admin SDK</span>
-          <span class="skill-tag">Drive API</span>
-          <span class="skill-tag">GAM</span>
-        </div>
+        <div class="skill-desc">Super Admin managing 180+ accounts, OU structures, shared drives, group policies, and device management.</div>
+        <div class="skill-tags"><span class="skill-tag">GWS Super Admin</span><span class="skill-tag">Admin SDK</span><span class="skill-tag">Drive API</span></div>
       </div>
       <div class="skill-card">
-        <div class="skill-icon">📊</div>
+        <div class="skill-num">04</div>
         <div class="skill-name">Data & Audit Systems</div>
-        <div class="skill-desc">Building audit frameworks, data pipelines, and reporting dashboards that surface compliance gaps and operational metrics in real time.</div>
-        <div class="skill-tags">
-          <span class="skill-tag">Google Sheets</span>
-          <span class="skill-tag">PropertiesService</span>
-          <span class="skill-tag">REST APIs</span>
-          <span class="skill-tag">Supabase</span>
-        </div>
+        <div class="skill-desc">Audit frameworks, data pipelines, and reporting dashboards surfacing compliance gaps and operational metrics.</div>
+        <div class="skill-tags"><span class="skill-tag">Google Sheets</span><span class="skill-tag">REST APIs</span><span class="skill-tag">Supabase</span></div>
       </div>
       <div class="skill-card">
-        <div class="skill-icon">🏗️</div>
+        <div class="skill-num">05</div>
         <div class="skill-name">Web App Development</div>
-        <div class="skill-desc">Designing and building internal web applications — dashboards, portals, and trackers — deployed on Google Apps Script and Vercel.</div>
-        <div class="skill-tags">
-          <span class="skill-tag">HTML/CSS/JS</span>
-          <span class="skill-tag">GAS Web Apps</span>
-          <span class="skill-tag">Vercel</span>
-          <span class="skill-tag">GitHub</span>
-        </div>
+        <div class="skill-desc">Internal web applications — dashboards, portals, and trackers — deployed on Google Apps Script and Vercel.</div>
+        <div class="skill-tags"><span class="skill-tag">HTML/CSS/JS</span><span class="skill-tag">GAS Web Apps</span><span class="skill-tag">Vercel</span></div>
       </div>
       <div class="skill-card">
-        <div class="skill-icon">🔗</div>
+        <div class="skill-num">06</div>
         <div class="skill-name">Systems Integration</div>
-        <div class="skill-desc">Connecting disparate platforms — JazzHR, Monday.com, Harvest, Google Workspace — into unified data flows and operational workflows.</div>
-        <div class="skill-tags">
-          <span class="skill-tag">JazzHR API</span>
-          <span class="skill-tag">Monday.com</span>
-          <span class="skill-tag">Harvest</span>
-          <span class="skill-tag">Zapier</span>
-        </div>
+        <div class="skill-desc">Connecting JazzHR, Monday.com, Harvest, and Google Workspace into unified data flows and workflows.</div>
+        <div class="skill-tags"><span class="skill-tag">JazzHR API</span><span class="skill-tag">Monday.com</span><span class="skill-tag">Harvest</span></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ── Projects ── -->
-<section id="projects">
-  <div class="section-eyebrow">Projects</div>
-  <h2 class="section-title">What I've built.</h2>
-  <div class="projects-grid">
-
+<!-- Projects -->
+<div class="section" id="projects">
+  <div class="section-eyebrow reveal">Projects</div>
+  <h2 class="section-title reveal delay-1">What I've built.</h2>
+  <div class="projects-list reveal delay-2">
     <div class="project-row">
       <div>
         <div class="project-num">01</div>
         <div class="project-name">BrightPath Employee Dashboard</div>
-        <div class="project-desc">Multi-tab admin platform built in Google Apps Script covering Google Group management, 2FA tracking, email threats, login monitoring, admin activity, drive exposure, and device management. Authorized for executive and IT admin access.</div>
-        <div class="project-tags">
-          <span class="project-tag">Google Apps Script</span>
-          <span class="project-tag">Admin SDK</span>
-          <span class="project-tag">Drive API v3</span>
-          <span class="project-tag">PropertiesService</span>
-        </div>
+        <div class="project-desc">Multi-tab admin platform covering Google Group management, 2FA tracking, email threats, login monitoring, admin activity, drive exposure, and device management.</div>
+        <div class="project-tags"><span class="project-tag">Google Apps Script</span><span class="project-tag">Admin SDK</span><span class="project-tag">Drive API v3</span></div>
       </div>
-      <span class="project-badge badge-live">Live</span>
+      <span class="badge badge-live">Live</span>
     </div>
-
     <div class="project-row">
       <div>
         <div class="project-num">02</div>
         <div class="project-name">2FA Enrollment Tracker</div>
-        <div class="project-desc">Google Apps Script web app monitoring 2FA enrollment across 180+ staff accounts. Sends automated confirmation emails, tracks enrollment status in real time, and surfaces non-compliant accounts for follow-up.</div>
-        <div class="project-tags">
-          <span class="project-tag">GAS Web App</span>
-          <span class="project-tag">Admin SDK</span>
-          <span class="project-tag">MailApp</span>
-          <span class="project-tag">Google Sheets</span>
-        </div>
+        <div class="project-desc">Web app monitoring 2FA enrollment across 180+ staff accounts with automated confirmation emails and real-time compliance tracking.</div>
+        <div class="project-tags"><span class="project-tag">GAS Web App</span><span class="project-tag">Admin SDK</span><span class="project-tag">MailApp</span></div>
       </div>
-      <span class="project-badge badge-live">Live</span>
+      <span class="badge badge-live">Live</span>
     </div>
-
     <div class="project-row">
       <div>
         <div class="project-num">03</div>
         <div class="project-name">Shared Drive Manager</div>
-        <div class="project-desc">Full Drive API v3 restriction management tool for auditing and controlling 80+ shared drives. Solved a critical discovery: GAS Drive Advanced Service silently ignores restriction writes — solved via direct UrlFetchApp PATCH to Drive REST API v3.</div>
-        <div class="project-tags">
-          <span class="project-tag">Drive REST API v3</span>
-          <span class="project-tag">UrlFetchApp</span>
-          <span class="project-tag">GAS</span>
-        </div>
+        <div class="project-desc">Full Drive API v3 restriction management for 80+ shared drives. Solved a critical GAS limitation — direct UrlFetchApp PATCH to Drive REST API v3 required for restriction writes.</div>
+        <div class="project-tags"><span class="project-tag">Drive REST API v3</span><span class="project-tag">UrlFetchApp</span><span class="project-tag">GAS</span></div>
       </div>
-      <span class="project-badge badge-live">Live</span>
+      <span class="badge badge-live">Live</span>
     </div>
-
     <div class="project-row">
       <div>
         <div class="project-num">04</div>
         <div class="project-name">GWS Security Implementation Plan</div>
-        <div class="project-desc">Organization-wide security rollout covering OU structure buildout, 2FA enforcement, vendor password manager evaluation (1Password vs Bitwarden), Alert Center triage, and HIPAA/245D compliance alignment across 180–220 accounts.</div>
-        <div class="project-tags">
-          <span class="project-tag">HIPAA</span>
-          <span class="project-tag">NIST CSF</span>
-          <span class="project-tag">GWS Security</span>
-          <span class="project-tag">245D</span>
-        </div>
+        <div class="project-desc">Org-wide security rollout covering OU structure, 2FA enforcement, password manager evaluation, Alert Center triage, and HIPAA/245D compliance for 180–220 accounts.</div>
+        <div class="project-tags"><span class="project-tag">HIPAA</span><span class="project-tag">NIST CSF</span><span class="project-tag">GWS Security</span></div>
       </div>
-      <span class="project-badge badge-active">Active</span>
+      <span class="badge badge-active">Active</span>
     </div>
-
     <div class="project-row">
       <div>
         <div class="project-num">05</div>
         <div class="project-name">Harvest → Monday.com AI Sync Agent</div>
-        <div class="project-desc">Automated sync agent connecting Harvest time tracking to Monday.com project boards, with AI-assisted categorization and weekly reporting. Built using n8n with sub-agent architecture for autonomous weekly summaries.</div>
-        <div class="project-tags">
-          <span class="project-tag">n8n</span>
-          <span class="project-tag">Harvest API</span>
-          <span class="project-tag">Monday.com API</span>
-          <span class="project-tag">AI Agents</span>
-        </div>
+        <div class="project-desc">Automated sync agent connecting Harvest time tracking to Monday.com with AI-assisted categorization and autonomous weekly reporting via n8n sub-agent architecture.</div>
+        <div class="project-tags"><span class="project-tag">n8n</span><span class="project-tag">Harvest API</span><span class="project-tag">Monday.com API</span></div>
       </div>
-      <span class="project-badge badge-active">Active</span>
+      <span class="badge badge-active">Active</span>
     </div>
-
     <div class="project-row">
       <div>
         <div class="project-num">06</div>
         <div class="project-name">BusinessPath MOS</div>
-        <div class="project-desc">Branch of the S360 Management Operating System — a Supabase-authenticated web platform showcasing the 90-day engagement framework for transitioning organizations from legacy SaaS to a custom operating system.</div>
-        <div class="project-tags">
-          <span class="project-tag">HTML/CSS/JS</span>
-          <span class="project-tag">Supabase Auth</span>
-          <span class="project-tag">Vercel</span>
-          <span class="project-tag">GitHub</span>
-        </div>
+        <div class="project-desc">Supabase-authenticated web platform showcasing the 90-day S360 engagement framework. Magic link login, protected dashboard, deployed on Vercel with GitHub CI.</div>
+        <div class="project-tags"><span class="project-tag">Supabase Auth</span><span class="project-tag">Vercel</span><span class="project-tag">GitHub</span></div>
       </div>
-      <span class="project-badge badge-build">In Build</span>
+      <span class="badge badge-build">In Build</span>
     </div>
-
   </div>
-</section>
+</div>
 
-<!-- ── Experience ── -->
-<section id="experience">
-  <div class="section-eyebrow">Experience</div>
-  <h2 class="section-title">Where I've worked.</h2>
-  <div class="exp-list">
-
+<!-- Experience -->
+<div class="section" id="experience" style="border-top:0.5px solid rgba(255,255,255,0.05);">
+  <div class="section-eyebrow reveal">Experience</div>
+  <h2 class="section-title reveal delay-1">Where I've worked.</h2>
+  <div class="reveal delay-2">
     <div class="exp-item">
       <div class="exp-period">2023 — Present</div>
       <div>
         <div class="exp-role">Data Automation & Audit Specialist</div>
         <div class="exp-company">BrightPath LLC · Remote (Philippines)</div>
-        <div class="exp-desc">Leading IT security, compliance, and automation initiatives for a 245D disability services provider. Serving as Google Workspace Super Admin with oversight of 180+ staff accounts, security infrastructure, and internal tooling.</div>
+        <div class="exp-desc">Leading IT security, compliance, and automation for a 245D disability services provider. Google Workspace Super Admin with oversight of 180+ staff accounts and full security infrastructure.</div>
         <ul class="exp-bullets">
           <li>Designed and executed org-wide 2FA rollout and GWS security implementation plan</li>
           <li>Built multi-tab Employee Dashboard covering security, HR, and operational monitoring</li>
@@ -572,26 +522,24 @@
         </ul>
       </div>
     </div>
-
     <div class="exp-item">
       <div class="exp-period">Ongoing</div>
       <div>
         <div class="exp-role">S360 Pathfinder</div>
         <div class="exp-company">Summit 360 Solutions · External Designation</div>
-        <div class="exp-desc">Designated Pathfinder collaborating with S360 contacts Lane Elmer and Rey Dumasig on IT strategy, MOS implementation, and technology roadmapping for BrightPath's operational systems.</div>
+        <div class="exp-desc">Designated Pathfinder collaborating with S360 on IT strategy, MOS implementation, and technology roadmapping for BrightPath's operational systems.</div>
         <ul class="exp-bullets">
           <li>Co-developing the BusinessPath Management Operating System with S360 framework</li>
           <li>Supporting 90-day engagement planning and custom module prioritization</li>
         </ul>
       </div>
     </div>
-
   </div>
-</section>
+</div>
 
-<!-- ── Contact ── -->
-<section id="contact">
-  <div class="contact-wrap">
+<!-- Contact -->
+<div class="section" id="contact">
+  <div class="contact-wrap reveal">
     <div>
       <div class="contact-title">Let's build something that works.</div>
       <div class="contact-desc">Available for IT automation consulting, Google Workspace administration, and security compliance projects. Based in the Philippines, working remotely across time zones.</div>
@@ -599,33 +547,151 @@
     <div class="contact-links">
       <a class="contact-link" href="mailto:mrmichaelsevilla@gmail.com">
         <span class="contact-link-icon">✉</span>
-        <div>
-          <div class="contact-link-label">Email</div>
-          <div class="contact-link-value">mrmichaelsevilla@gmail.com</div>
-        </div>
+        <div><div class="contact-link-label">Email</div><div class="contact-link-value">mrmichaelsevilla@gmail.com</div></div>
       </a>
       <a class="contact-link" href="https://github.com/mrmichaelsevilla" target="_blank">
         <span class="contact-link-icon">⌥</span>
-        <div>
-          <div class="contact-link-label">GitHub</div>
-          <div class="contact-link-value">github.com/mrmichaelsevilla</div>
-        </div>
+        <div><div class="contact-link-label">GitHub</div><div class="contact-link-value">github.com/mrmichaelsevilla</div></div>
       </a>
       <a class="contact-link" href="https://businesspath-mos.vercel.app" target="_blank">
         <span class="contact-link-icon">◈</span>
-        <div>
-          <div class="contact-link-label">Live Project</div>
-          <div class="contact-link-value">businesspath-mos.vercel.app</div>
-        </div>
+        <div><div class="contact-link-label">Live Project</div><div class="contact-link-value">businesspath-mos.vercel.app</div></div>
       </a>
     </div>
   </div>
-</section>
+</div>
 
-<!-- ── Footer ── -->
-<footer>
-  © 2026 <span>Michael Sevilla</span> · Data Automation & IT Specialist · Built with precision.
-</footer>
+</div><!-- /page -->
 
+<footer>© 2026 <span>Michael Sevilla</span> · Data Automation & IT Specialist · Built with precision.</footer>
+
+<script>
+/* ── Custom cursor ── */
+const cur=document.getElementById('cursor');
+const ring=document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  cur.style.left=mx+'px';cur.style.top=my+'px';
+});
+(function animRing(){
+  rx+=(mx-rx)*0.12;
+  ry+=(my-ry)*0.12;
+  ring.style.left=rx+'px';ring.style.top=ry+'px';
+  requestAnimationFrame(animRing);
+})();
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.transform='translate(-50%,-50%) scale(2.5)';ring.style.transform='translate(-50%,-50%) scale(1.5)';ring.style.borderColor='rgba(201,162,39,0.8)';});
+  el.addEventListener('mouseleave',()=>{cur.style.transform='translate(-50%,-50%) scale(1)';ring.style.transform='translate(-50%,-50%) scale(1)';ring.style.borderColor='rgba(201,162,39,0.5)';});
+});
+
+/* ── Interactive canvas background ── */
+const canvas=document.getElementById('bg-canvas');
+const ctx=canvas.getContext('2d');
+let W,H,nodes=[],trails=[];
+const NODE_COUNT=90;
+const MOUSE={x:-999,y:-999};
+
+function resize(){
+  W=canvas.width=window.innerWidth;
+  H=canvas.height=window.innerHeight;
+}
+resize();
+window.addEventListener('resize',resize);
+document.addEventListener('mousemove',e=>{MOUSE.x=e.clientX;MOUSE.y=e.clientY;});
+
+function initNodes(){
+  nodes=[];
+  for(let i=0;i<NODE_COUNT;i++){
+    nodes.push({
+      x:Math.random()*W,y:Math.random()*H,
+      vx:(Math.random()-.5)*0.4,vy:(Math.random()-.5)*0.4,
+      r:Math.random()*1.5+0.5,
+    });
+  }
+}
+initNodes();
+
+function drawBackground(){
+  ctx.clearRect(0,0,W,H);
+
+  /* Mouse spotlight */
+  const spot=ctx.createRadialGradient(MOUSE.x,MOUSE.y,0,MOUSE.x,MOUSE.y,280);
+  spot.addColorStop(0,'rgba(201,162,39,0.07)');
+  spot.addColorStop(0.5,'rgba(201,162,39,0.02)');
+  spot.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=spot;
+  ctx.fillRect(0,0,W,H);
+
+  /* Mouse light lines — radiate outward from cursor */
+  const lineCount=12;
+  for(let i=0;i<lineCount;i++){
+    const angle=(i/lineCount)*Math.PI*2;
+    const len=120+Math.sin(Date.now()*0.002+i)*40;
+    const ex=MOUSE.x+Math.cos(angle)*len;
+    const ey=MOUSE.y+Math.sin(angle)*len;
+    ctx.beginPath();
+    ctx.moveTo(MOUSE.x,MOUSE.y);
+    ctx.lineTo(ex,ey);
+    ctx.strokeStyle=`rgba(201,162,39,${0.06+Math.sin(Date.now()*0.003+i)*0.03})`;
+    ctx.lineWidth=0.5;
+    ctx.stroke();
+  }
+
+  /* Update & draw nodes */
+  nodes.forEach(n=>{
+    n.x+=n.vx;n.y+=n.vy;
+    if(n.x<0||n.x>W)n.vx*=-1;
+    if(n.y<0||n.y>H)n.vy*=-1;
+
+    /* Mouse attraction */
+    const dx=MOUSE.x-n.x,dy=MOUSE.y-n.y;
+    const dist=Math.sqrt(dx*dx+dy*dy);
+    if(dist<200){
+      n.x+=dx*0.003;
+      n.y+=dy*0.003;
+    }
+
+    ctx.beginPath();
+    ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
+    const alpha=dist<200?0.7:0.25;
+    ctx.fillStyle=`rgba(201,162,39,${alpha})`;
+    ctx.fill();
+  });
+
+  /* Draw connections */
+  for(let i=0;i<nodes.length;i++){
+    for(let j=i+1;j<nodes.length;j++){
+      const a=nodes[i],b=nodes[j];
+      const dx=a.x-b.x,dy=a.y-b.y;
+      const d=Math.sqrt(dx*dx+dy*dy);
+      if(d<140){
+        /* Check if near mouse */
+        const mx2=(a.x+b.x)/2,my2=(a.y+b.y)/2;
+        const mdx=MOUSE.x-mx2,mdy=MOUSE.y-my2;
+        const md=Math.sqrt(mdx*mdx+mdy*mdy);
+        const bright=md<250;
+        ctx.beginPath();
+        ctx.moveTo(a.x,a.y);
+        ctx.lineTo(b.x,b.y);
+        ctx.strokeStyle=bright
+          ?`rgba(201,162,39,${(1-d/140)*0.5})`
+          :`rgba(201,162,39,${(1-d/140)*0.1})`;
+        ctx.lineWidth=bright?0.8:0.4;
+        ctx.stroke();
+      }
+    }
+  }
+
+  requestAnimationFrame(drawBackground);
+}
+drawBackground();
+
+/* ── Scroll reveal ── */
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on');});
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
 </body>
 </html>
