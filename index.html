@@ -590,6 +590,44 @@ footer span{color:var(--gold);}
   .skills-grid{grid-template-columns:1fr;}
   .contact-wrap{padding:36px 24px;}
 }
+
+/* Dashboard Lightbox */
+.lightbox{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.92);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+  opacity:0;
+  visibility:hidden;
+  transition:.3s ease;
+  padding:40px;
+}
+.lightbox.active{opacity:1;visibility:visible;}
+.lightbox img{
+  max-width:95%;
+  max-height:90vh;
+  border-radius:10px;
+  box-shadow:0 20px 80px rgba(0,0,0,.6);
+}
+.lightbox-close{
+  position:absolute;
+  top:20px;
+  right:30px;
+  color:white;
+  font-size:40px;
+  cursor:pointer;
+}
+.dashboard-image img{
+  cursor:pointer;
+  transition:.3s ease;
+}
+.dashboard-image img:hover{
+  transform:scale(1.02);
+}
+
 </style>
 </head>
 <body>
@@ -785,7 +823,7 @@ footer span{color:var(--gold);}
 
     <div class="dashboard-card">
       <div class="dashboard-image">
-        <img src="Task and Project Tracker.png" alt="Task and Project Tracker dashboard preview">
+        <img src="Task and Project Tracker.png" alt="Task and Project Tracker dashboard preview" onclick="openLightbox(this.src)">
       </div>
       <div class="dashboard-copy">
         <div class="dashboard-badge">Task Operations</div>
@@ -819,7 +857,7 @@ footer span{color:var(--gold);}
 
     <div class="dashboard-card">
       <div class="dashboard-image">
-        <img src="Trust Bank Analytics Dashboard.png" alt="TrustBank Analytics Dashboard preview">
+        <img src="Trust Bank Analytics Dashboard.png" alt="TrustBank Analytics Dashboard preview" onclick="openLightbox(this.src)">
       </div>
       <div class="dashboard-copy">
         <div class="dashboard-badge">Banking Analytics</div>
@@ -1132,6 +1170,18 @@ const obs=new IntersectionObserver(entries=>{
   entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on');});
 },{threshold:0.1});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+
+<div class="lightbox" id="lightbox">
+  <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+  <img id="lightbox-img" src="">
+</div>
+
+<script>
+function openLightbox(src){document.getElementById('lightbox-img').src=src;document.getElementById('lightbox').classList.add('active');}
+function closeLightbox(){document.getElementById('lightbox').classList.remove('active');}
+document.getElementById('lightbox').addEventListener('click',function(e){if(e.target===this){closeLightbox();}});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeLightbox();}});
 </script>
 </body>
 </html>
