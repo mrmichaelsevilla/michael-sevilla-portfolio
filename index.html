@@ -100,11 +100,40 @@ nav{
 .hero{
   min-height:100vh;
   display:flex;align-items:center;
+  gap:56px;
   padding:120px 52px 80px;
   max-width:1200px;margin:0 auto;
   position:relative;
 }
-.hero-content{max-width:660px;}
+.hero-image{
+  flex:0 0 360px;
+  position:relative;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  min-height:470px;
+  pointer-events:none;
+}
+.hero-image img{
+  width:min(380px,36vw);
+  max-height:520px;
+  object-fit:contain;
+  display:block;
+  opacity:0.50;
+  filter:grayscale(100%) contrast(112%) brightness(105%);
+  mix-blend-mode:screen;
+  -webkit-mask-image:radial-gradient(circle at 55% 35%, black 0%, black 46%, rgba(0,0,0,0.82) 64%, transparent 90%);
+  mask-image:radial-gradient(circle at 55% 35%, black 0%, black 46%, rgba(0,0,0,0.82) 64%, transparent 90%);
+}
+.hero-image::after{
+  content:'';
+  position:absolute;
+  inset:8% 0 0 0;
+  background:radial-gradient(circle at 55% 38%, rgba(201,162,39,0.16), transparent 54%);
+  z-index:-1;
+  opacity:0.65;
+}
+.hero-content{max-width:660px;position:relative;z-index:2;}
 .hero-tag{
   display:inline-flex;align-items:center;gap:10px;
   font-family:'JetBrains Mono',monospace;
@@ -385,7 +414,10 @@ footer span{color:var(--gold);}
 @media(max-width:768px){
   nav{padding:0 20px;}
   .nav-links{gap:16px;}
-  .hero{padding:100px 20px 60px;}
+  .hero{padding:100px 20px 60px;flex-direction:column;gap:28px;text-align:center;}
+  .hero-image{flex:none;width:100%;min-height:280px;margin-bottom:4px;}
+  .hero-image img{width:min(280px,76vw);max-height:330px;opacity:0.50;}
+  .hero-tag{justify-content:center;}
   .hero-stats,.hero-vline{display:none;}
   .section{padding:64px 20px;}
   .about-grid,.exp-item,.contact-wrap{grid-template-columns:1fr;gap:32px;}
@@ -418,6 +450,9 @@ footer span{color:var(--gold);}
 <!-- Hero -->
 <div style="max-width:1200px;margin:0 auto;position:relative;">
   <div class="hero">
+    <div class="hero-image">
+      <img src="Michael.png" alt="Michael Sevilla portrait">
+    </div>
     <div class="hero-content">
       <div class="hero-tag">Data Analyst & Automation Specialist</div>
       <h1 class="hero-title">
@@ -705,13 +740,9 @@ footer span{color:var(--gold);}
         <span class="contact-link-icon">✉</span>
         <div><div class="contact-link-label">Email</div><div class="contact-link-value">mrmichaelsevilla@gmail.com</div></div>
       </a>
-      <a class="contact-link" href="https://github.com/mrmichaelsevilla" target="_blank">
-        <span class="contact-link-icon">⌥</span>
-        <div><div class="contact-link-label">GitHub</div><div class="contact-link-value">github.com/mrmichaelsevilla</div></div>
-      </a>
-      <a class="contact-link" href="https://mrmichael-sevilla-portfolio.vercel.app" target="_blank">
+      <a class="contact-link" href="https://www.canva.com/design/DAHGvT_1ga0/wI9XDMJgAyAcoXnnwCN69Q/edit" target="_blank">
         <span class="contact-link-icon">◈</span>
-        <div><div class="contact-link-label">Portfolio</div><div class="contact-link-value">mrmichael-sevilla-portfolio.vercel.app</div></div>
+        <div><div class="contact-link-label">Portfolio</div><div class="contact-link-value">Canva Portfolio</div></div>
       </a>
     </div>
   </div>
