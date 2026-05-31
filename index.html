@@ -302,6 +302,135 @@ nav{
 .badge-active{background:rgba(201,162,39,0.08);color:var(--gold);border:0.5px solid var(--border);}
 .badge-build{background:rgba(255,255,255,0.04);color:var(--dim);border:0.5px solid rgba(255,255,255,0.08);}
 
+
+/* ── Dashboards & Trackers Showcase ── */
+.dashboard-showcase{
+  display:flex;
+  flex-direction:column;
+  gap:42px;
+}
+.dashboard-card{
+  display:grid;
+  grid-template-columns:minmax(0,1.05fr) minmax(360px,0.95fr);
+  gap:34px;
+  align-items:center;
+  padding:28px;
+  border:0.5px solid var(--border);
+  border-radius:14px;
+  background:linear-gradient(135deg,rgba(255,255,255,0.045),rgba(255,255,255,0.015));
+  box-shadow:0 24px 60px rgba(0,0,0,0.22);
+  overflow:hidden;
+}
+.dashboard-card:nth-child(even){
+  grid-template-columns:minmax(360px,0.95fr) minmax(0,1.05fr);
+}
+.dashboard-card:nth-child(even) .dashboard-image{order:2;}
+.dashboard-card:nth-child(even) .dashboard-copy{order:1;}
+.dashboard-image{
+  position:relative;
+  border-radius:10px;
+  overflow:hidden;
+  background:rgba(255,255,255,0.04);
+  border:0.5px solid rgba(255,255,255,0.08);
+}
+.dashboard-image img{
+  width:100%;
+  display:block;
+  object-fit:cover;
+  filter:saturate(1.04) contrast(1.03);
+}
+.dashboard-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:14px;
+}
+.dashboard-badge::before{
+  content:'';
+  width:28px;
+  height:1px;
+  background:var(--gold);
+}
+.dashboard-name{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(26px,3vw,38px);
+  line-height:1.12;
+  color:var(--white);
+  margin-bottom:14px;
+}
+.dashboard-summary{
+  color:var(--dim);
+  line-height:1.8;
+  font-size:14.5px;
+  font-weight:300;
+  margin-bottom:20px;
+}
+.dashboard-features{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  margin:20px 0 22px;
+}
+.dashboard-feature{
+  padding:11px 12px;
+  border-radius:8px;
+  background:rgba(201,162,39,0.055);
+  border:0.5px solid rgba(201,162,39,0.16);
+  color:var(--white);
+  font-size:12.5px;
+  line-height:1.45;
+}
+.dashboard-feature strong{
+  display:block;
+  color:var(--gold);
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  margin-bottom:4px;
+}
+.dashboard-plain{
+  padding:16px 18px;
+  border-left:2px solid var(--gold);
+  background:rgba(255,255,255,0.025);
+  color:rgba(240,236,224,0.82);
+  font-size:13.5px;
+  line-height:1.75;
+}
+.dashboard-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:18px;
+}
+.dashboard-tag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9.5px;
+  color:var(--gold);
+  background:rgba(201,162,39,0.08);
+  border:0.5px solid rgba(201,162,39,0.18);
+  padding:5px 9px;
+  border-radius:3px;
+}
+@media(max-width:900px){
+  .dashboard-card,
+  .dashboard-card:nth-child(even){
+    grid-template-columns:1fr;
+  }
+  .dashboard-card:nth-child(even) .dashboard-image,
+  .dashboard-card:nth-child(even) .dashboard-copy{
+    order:initial;
+  }
+  .dashboard-features{
+    grid-template-columns:1fr;
+  }
+}
+
 /* ── Experience ── */
 .exp-item{
   display:grid;grid-template-columns:180px 1fr;
@@ -478,6 +607,7 @@ footer span{color:var(--gold);}
     <a href="#about">About</a>
     <a href="#skills">Skills</a>
     <a href="#projects">Projects</a>
+    <a href="#dashboards">Dashboards</a>
     <a href="#experience">Experience</a>
     <a href="#tools">Tools</a>
     <a href="#contact">Contact</a>
@@ -644,6 +774,86 @@ footer span{color:var(--gold);}
     </div>
   </div>
 </div>
+
+
+<!-- Dashboards & Trackers -->
+<div class="section" id="dashboards" style="border-top:0.5px solid rgba(255,255,255,0.05);">
+  <div class="section-eyebrow reveal">Trackers & Dashboards</div>
+  <h2 class="section-title reveal delay-1">Operational dashboards that turn daily work into clear decisions.</h2>
+
+  <div class="dashboard-showcase reveal delay-2">
+
+    <div class="dashboard-card">
+      <div class="dashboard-image">
+        <img src="Task and Project Tracker.png" alt="Task and Project Tracker dashboard preview">
+      </div>
+      <div class="dashboard-copy">
+        <div class="dashboard-badge">Task Operations</div>
+        <div class="dashboard-name">Task & Project Tracker</div>
+        <p class="dashboard-summary">
+          A project monitoring dashboard designed to help managers see task volume, completion progress, overdue work,
+          employee productivity, department workload, and project hours in one clean view. Instead of manually checking
+          several spreadsheets, the dashboard gives a fast summary of what is finished, what is still moving, and what needs attention.
+        </p>
+
+        <div class="dashboard-features">
+          <div class="dashboard-feature"><strong>KPI Cards</strong>Shows total tasks, completed tasks, pending tasks, overdue tasks, completion rate, and hours worked at a glance.</div>
+          <div class="dashboard-feature"><strong>Progress Tracking</strong>Visual progress bars make it easy to compare employee completion percentages without reading long tables.</div>
+          <div class="dashboard-feature"><strong>Task Status Monitoring</strong>Color-coded statuses separate completed, in-progress, pending, and overdue work so issues are easier to spot.</div>
+          <div class="dashboard-feature"><strong>Department Analysis</strong>Charts show which departments carry more tasks, helping leaders understand workload distribution.</div>
+        </div>
+
+        <div class="dashboard-plain">
+          In simple terms, this dashboard answers: “Are we on track, who needs support, which tasks are delayed, and where is the workload coming from?”
+          It helps teams make faster follow-ups and avoid missing deadlines.
+        </div>
+
+        <div class="dashboard-tags">
+          <span class="dashboard-tag">KPI Monitoring</span>
+          <span class="dashboard-tag">Progress Tracking</span>
+          <span class="dashboard-tag">Employee Productivity</span>
+          <span class="dashboard-tag">Task Status</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-card">
+      <div class="dashboard-image">
+        <img src="Trust Bank Analytics Dashboard.png" alt="TrustBank Analytics Dashboard preview">
+      </div>
+      <div class="dashboard-copy">
+        <div class="dashboard-badge">Banking Analytics</div>
+        <div class="dashboard-name">TrustBank Analytics Dashboard</div>
+        <p class="dashboard-summary">
+          A banking analytics dashboard concept built to summarize high-level financial activity, customer behavior,
+          branch performance, transaction trends, fraud monitoring, and credit score distribution. The design uses strong
+          visual grouping so decision-makers can quickly understand business health without digging through raw data.
+        </p>
+
+        <div class="dashboard-features">
+          <div class="dashboard-feature"><strong>KPI Cards</strong>Highlights total transactions, deposits, withdrawals, active loans, fraud cases, and average credit score.</div>
+          <div class="dashboard-feature"><strong>Interactive Charts</strong>Line charts, donut charts, bar charts, and trend visuals explain the data from multiple business angles.</div>
+          <div class="dashboard-feature"><strong>Branch Performance</strong>Ranks branches by transaction volume so leaders can identify high-performing and lower-volume locations.</div>
+          <div class="dashboard-feature"><strong>Risk Monitoring</strong>Fraud and credit score views help teams quickly identify areas that may require investigation or preventive action.</div>
+        </div>
+
+        <div class="dashboard-plain">
+          In non-technical terms, this dashboard works like a control center for banking activity. It helps answer:
+          “Where is the money moving, which branches are performing best, are fraud cases increasing, and what customer segments need attention?”
+        </div>
+
+        <div class="dashboard-tags">
+          <span class="dashboard-tag">Banking Dashboard</span>
+          <span class="dashboard-tag">Trend Analysis</span>
+          <span class="dashboard-tag">Fraud Monitoring</span>
+          <span class="dashboard-tag">Customer Insights</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 
 <!-- Experience -->
 <div class="section" id="experience" style="border-top:0.5px solid rgba(255,255,255,0.05);">
