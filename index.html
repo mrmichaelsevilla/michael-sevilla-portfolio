@@ -591,6 +591,32 @@ footer span{color:var(--gold);}
   .contact-wrap{padding:36px 24px;}
 }
 
+/* Website iframe preview */
+.website-preview-wrap{
+  position:relative;
+  width:100%;
+  padding-bottom:62%;
+  overflow:hidden;
+  border-radius:10px;
+  background:#e8f5f0;
+  border:0.5px solid rgba(255,255,255,0.08);
+}
+.website-preview-wrap iframe{
+  position:absolute;
+  top:0;left:0;
+  width:200%;height:200%;
+  transform:scale(0.5);
+  transform-origin:top left;
+  border:none;
+  pointer-events:none;
+}
+.website-preview-overlay{
+  position:absolute;
+  inset:0;
+  cursor:pointer;
+  z-index:2;
+}
+
 /* Dashboard Lightbox */
 .lightbox{
   position:fixed;
@@ -825,8 +851,8 @@ footer span{color:var(--gold);}
 
 <!-- Dashboards & Trackers -->
 <div class="section" id="dashboards" style="border-top:0.5px solid rgba(255,255,255,0.05);">
-  <div class="section-eyebrow reveal">Trackers & Dashboards</div>
-  <h2 class="section-title reveal delay-1">Operational dashboards that turn daily work into clear decisions.</h2>
+  <div class="section-eyebrow reveal">Trackers, Dashboards & Websites</div>
+  <h2 class="section-title reveal delay-1">Operational dashboards and websites that turn work into results.</h2>
 
   <div class="dashboard-showcase reveal delay-2">
 
@@ -894,6 +920,52 @@ footer span{color:var(--gold);}
           <span class="dashboard-tag">Trend Analysis</span>
           <span class="dashboard-tag">Fraud Monitoring</span>
           <span class="dashboard-tag">Customer Insights</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-card">
+      <div class="dashboard-image">
+        <div class="website-preview-wrap">
+          <iframe src="https://shoppers-market.vercel.app" title="Shoppers Market website preview" loading="lazy" scrolling="no" tabindex="-1"></iframe>
+          <div class="website-preview-overlay" onclick="window.open('https://shoppers-market.vercel.app','_blank')"></div>
+        </div>
+      </div>
+      <div class="dashboard-copy">
+        <div class="dashboard-badge">Web Development</div>
+        <div class="dashboard-name">Shoppers Market</div>
+        <p class="dashboard-summary">
+          A full-featured city grocery store website built with HTML, Tailwind CSS, and vanilla JavaScript.
+          Designed to demonstrate premium web development — animated hero, live countdown deals,
+          interactive cart sidebar, scroll-reveal effects, and fully responsive layout across all devices.
+        </p>
+
+        <div class="dashboard-features">
+          <div class="dashboard-feature"><strong>Animated Hero</strong>Floating logo, morphing blobs, spinning ring, and glassmorphism info cards create an engaging first impression.</div>
+          <div class="dashboard-feature"><strong>Live Deals Timer</strong>Countdown clock on the deals section with animated sale badges and real-time ticking seconds.</div>
+          <div class="dashboard-feature"><strong>Cart Sidebar</strong>Slide-in cart drawer with overlay, item count badge, and add-to-cart interactions on every product.</div>
+          <div class="dashboard-feature"><strong>Scroll Animations</strong>Every section reveals smoothly on scroll with staggered delays — left, right, and upward transitions.</div>
+        </div>
+
+        <div class="dashboard-plain">
+          Built and deployed end-to-end: version-controlled on GitHub, hosted on Vercel with automatic CI/CD on every push. Fully accessible with ARIA labels, keyboard navigation, and reduced-motion support.
+        </div>
+
+        <div class="dashboard-tags">
+          <span class="dashboard-tag">HTML / CSS / JS</span>
+          <span class="dashboard-tag">Tailwind CSS</span>
+          <span class="dashboard-tag">Vercel</span>
+          <span class="dashboard-tag">GitHub CI/CD</span>
+          <span class="dashboard-tag">Responsive</span>
+        </div>
+
+        <div style="margin-top:20px;">
+          <a href="https://shoppers-market.vercel.app" target="_blank" rel="noopener noreferrer"
+            style="display:inline-flex;align-items:center;gap:10px;border:1px solid var(--gold);color:var(--gold);padding:11px 24px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;text-decoration:none;letter-spacing:0.1em;text-transform:uppercase;transition:background 0.2s,color 0.2s;"
+            onmouseover="this.style.background='var(--gold)';this.style.color='var(--bg)'"
+            onmouseout="this.style.background='';this.style.color='var(--gold)'">
+            Visit Live Site →
+          </a>
         </div>
       </div>
     </div>
