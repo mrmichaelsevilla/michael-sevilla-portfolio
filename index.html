@@ -810,6 +810,15 @@ footer span{color:var(--gold);}
       </div>
       <span class="badge badge-build">In Build</span>
     </div>
+    <div class="project-row">
+      <div>
+        <div class="project-num">07</div>
+        <div class="project-name">Shoppers Market — Grocery Store Website</div>
+        <div class="project-desc">Full-featured city grocery store website with animated hero section, product categories, live deals countdown, cart sidebar, newsletter, and contact form. Deployed on Vercel with GitHub CI/CD.</div>
+        <div class="project-tags"><span class="project-tag">HTML/CSS/JS</span><span class="project-tag">Tailwind CSS</span><span class="project-tag">Vercel</span><span class="project-tag">GitHub</span><span class="project-tag">Responsive Design</span></div>
+      </div>
+      <a href="https://shoppers-market.vercel.app" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><span class="badge badge-live">Live</span></a>
+    </div>
   </div>
 </div>
 
@@ -1181,6 +1190,7 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 function openLightbox(src){document.getElementById('lightbox-img').src=src;document.getElementById('lightbox').classList.add('active');}
 function closeLightbox(){document.getElementById('lightbox').classList.remove('active');}
 document.getElementById('lightbox').addEventListener('click',function(e){if(e.target===this){closeLightbox();}});
+document.getElementById('lightbox-img').addEventListener('click',function(e){e.stopPropagation();});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeLightbox();}});
 </script>
 </body>
