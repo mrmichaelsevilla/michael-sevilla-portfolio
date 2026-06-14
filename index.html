@@ -131,6 +131,9 @@ nav{
   -webkit-mask-image:linear-gradient(to bottom, black 0%, black 76%, rgba(0,0,0,0.65) 88%, transparent 100%);
   mask-image:linear-gradient(to bottom, black 0%, black 76%, rgba(0,0,0,0.65) 88%, transparent 100%);
 }
+.hero-image video{
+  mix-blend-mode:multiply;
+}
 .hero-content{
   max-width:760px;
   position:relative;
@@ -683,7 +686,8 @@ footer span{color:var(--gold);}
 <div style="max-width:1680px;width:100%;margin:0 auto;position:relative;">
   <div class="hero">
     <div class="hero-image">
-      <video id="hero-video" src="robotic_transformation.mp4" autoplay muted playsinline preload="auto" alt="Michael Sevilla"></video>
+      <video id="hero-video" src="robotic_transformation.mp4" autoplay muted playsinline preload="auto"></video>
+      <img id="hero-img" src="Michael.png" alt="Michael Sevilla" style="display:none;">
     </div>
     <div class="hero-content">
       <div class="hero-tag">Data Analyst & Automation Specialist</div>
@@ -1336,14 +1340,19 @@ function drawBackground(){
 }
 drawBackground();
 
-/* ── Hero video: play → end → pause 90s → play again ── */
+/* ── Hero video: play → end → show image for 90s → play again ── */
 const heroVideo = document.getElementById('hero-video');
-if(heroVideo){
+const heroImg   = document.getElementById('hero-img');
+if(heroVideo && heroImg){
   heroVideo.addEventListener('ended', function(){
+    heroVideo.style.display = 'none';
+    heroImg.style.display   = 'block';
     setTimeout(function(){
-      heroVideo.currentTime = 0;
+      heroImg.style.display   = 'none';
+      heroVideo.style.display = 'block';
+      heroVideo.currentTime   = 0;
       heroVideo.play();
-    }, 90000); // 1.5 minutes = 90,000ms
+    }, 90000);
   });
 }
 
