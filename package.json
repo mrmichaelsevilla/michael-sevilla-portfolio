@@ -1,0 +1,10 @@
+{
+  "name": "michael-sevilla-portfolio",
+  "version": "1.0.0",
+  "description": "Michael Sevilla's online portfolio",
+  "author": "Michael Sevilla",
+  "license": "MIT",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}
